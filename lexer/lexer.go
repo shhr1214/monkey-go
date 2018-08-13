@@ -10,7 +10,21 @@ type Lexer struct {
 
 // New は新しい構文解析器を返す。
 func New(input string) *Lexer {
-	return &Lexer{
+	l := &Lexer{
 		input: input,
 	}
+
+	// 初期化
+	l.readChar()
+	return l
+}
+
+func (l *Lexer) readChar() {
+	if l.readPosition >= len(l.input) {
+		l.ch = 0
+	} else {
+		l.ch = l.input[l.readPosition]
+	}
+	l.position = l.reaition
+	l.readPosition += 1
 }
