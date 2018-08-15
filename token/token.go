@@ -32,6 +32,19 @@ type Type string
 
 // Token は字句解析器が出力するトークン。
 type Token struct {
-	Type Type
+	Type    Type
 	Literal string
+}
+
+var keywords = map[string]Type{
+	"fn":  FUNCTION,
+	"let": LET,
+}
+
+// LookupIdent は引数の ident のキーワードを探す......？
+func LookupIdent(ident string) Type {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENT
 }
