@@ -41,7 +41,8 @@ var keywords = map[string]Type{
 	"let": LET,
 }
 
-// LookupIdent は引数の ident のキーワードを探す......？
+// LookupIdent は引数の IDENT がキーワードでないか判定する。
+// もし、キーワードであれば、キーワードの Type を返す。
 func LookupIdent(ident string) Type {
 	if tok, ok := keywords[ident]; ok {
 		return tok
