@@ -54,8 +54,12 @@ func (l *Lexer) NextToken() token.Token {
 	case '}':
 		tok = newToken(token.RBRACE, l.ch)
 	case 0:
+		tok.Literal = ""
+		tok.Type = token.EOF
+	default:
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
 		}
 		tok = newToken(token.ILLEGAL, l.ch)
@@ -66,11 +70,11 @@ func (l *Lexer) NextToken() token.Token {
 }
 
 func (l *Lexer) readIdentifier() string {
-	position := l.position
+	pos := l.position
 	for isLetter(l.ch) {
 		l.readChar()
 	}
-	return l.input[position:l.position]
+	return l.input[pos:l.position]
 }
 
 func newToken(tokenType token.Type, ch byte) token.Token {
