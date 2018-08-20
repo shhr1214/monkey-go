@@ -37,6 +37,9 @@ const (
 	IF       = "IF"
 	ELSE     = "ELSE"
 	RETURN   = "RETURN"
+
+	EQ     = "=="
+	NOT_EQ = "!="
 )
 
 // Type はトークンの種類を表す。
