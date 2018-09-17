@@ -64,17 +64,23 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 		return nil
 	}
 
-	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	stmt.Name = &ast.Identifier{
+		Token: p.curToken,
+		Value: p.curToken.Literal,
+	}
 
 	if !p.expectPeek(token.ASSIGN) {
-		p.nextToken()
+		return nil
 	}
+	p.nextToken()
 
 	return stmt
 }
 
 func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
-	stmt := &ast.ReturnStatement{Token: p.curToken}
+	stmt := &ast.ReturnStatement{
+		Token: p.curToken,
+	}
 
 	p.nextToken()
 
