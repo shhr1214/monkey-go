@@ -38,6 +38,9 @@ func New(l *lexer.Lexer) *Parser {
 	p.nextToken()
 	p.nextToken()
 
+	p.prefixParseFns = make(map[token.Type]prefixParseFn)
+	p.registerPrefix(token.IDENT, p.parseIdentifier)
+
 	return p
 }
 
@@ -107,7 +110,7 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	return stmt
 }
 
-func (p *Parser) parseExpressionStatement() *ast.ExressionStatement {
+func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement {
 	stmt := &ast.ExpressionStatement{
 		Token: p.curToken,
 	}
@@ -119,6 +122,23 @@ func (p *Parser) parseExpressionStatement() *ast.ExressionStatement {
 	}
 
 	return stmt
+}
+
+func (p *Parser) parseExpression(precedence int) ast.Expression {
+	prefix := p.prefixParseFns[p.curToken.Type]
+	if prefix == nil {
+		return nil
+	}
+	leftExp := prefix()
+
+	return leftExp
+}
+
+func (p *Parser) parseIdentifier() ast.Expression {
+	return &ast.Identifier{
+		Token: p.curToken,
+		Value: p.curToken.Literal,
+	}
 }
 
 func (p *Parser) curTokenIs(t token.Type) bool {
