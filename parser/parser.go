@@ -117,3 +117,8 @@ func (p *Parser) peekError(t token.Type) {
 	msg := fmt.Sprintf("expected next token to be %s, got %s instread", t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
+
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
+)
