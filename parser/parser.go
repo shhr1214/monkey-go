@@ -19,6 +19,11 @@ const (
 	CALL        // myFunction(X)
 )
 
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
+)
+
 type Parser struct {
 	l      *lexer.Lexer
 	errors []string
@@ -35,11 +40,12 @@ func New(l *lexer.Lexer) *Parser {
 		l:      l,
 		errors: []string{},
 	}
-	p.nextToken()
-	p.nextToken()
 
 	p.prefixParseFns = make(map[token.Type]prefixParseFn)
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
+
+	p.nextToken()
+	p.nextToken()
 
 	return p
 }
@@ -166,11 +172,6 @@ func (p *Parser) peekError(t token.Type) {
 	msg := fmt.Sprintf("expected next token to be %s, got %s instread", t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
-
-type (
-	prefixParseFn func() ast.Expression
-	infixParseFn  func(ast.Expression) ast.Expression
-)
 
 func (p *Parser) registerPrefix(t token.Type, fn prefixParseFn) {
 	p.prefixParseFns[t] = fn
