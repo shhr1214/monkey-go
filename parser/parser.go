@@ -102,6 +102,11 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	}
 	p.nextToken()
 
+	stmt.Value = p.parseExpression(LOWEST)
+	for p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
 	return stmt
 }
 
